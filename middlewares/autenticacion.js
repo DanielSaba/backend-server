@@ -1,0 +1,26 @@
+const jwt=require('jsonwebtoken');
+
+//------------------------------------------
+
+const SEED=require('../config/config').SEED;
+
+
+exports.verificaToken=function (req, res, next) {  
+    
+        const token=req.body.token;
+        jwt.verify(token,SEED,(err,decoded)=>{
+            if(err){
+                return res.status(401).json({
+                    ok:false,
+                    mensaje:'Token incorrecto',
+                    errors:err
+                });
+            }   
+
+            req.usuario=decoded.usuario;
+
+            next();
+        });
+
+}
+
